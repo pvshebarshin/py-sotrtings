@@ -1,13 +1,13 @@
 import unittest
 
-from python.sortings import counting_sort
+from python.sortings import bubble_sort
 
 
-class CountingSortTest(unittest.TestCase):
+class BubbleSortTest(unittest.TestCase):
 
     def test_simple(self):
         arr = [3, 2, 1]
-        res = counting_sort(arr)
+        res = bubble_sort(arr)
         self.assertEquals(res[0], 1)
         self.assertEquals(res[1], 2)
         self.assertEquals(res[2], 3)
