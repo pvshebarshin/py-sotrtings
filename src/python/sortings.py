@@ -69,6 +69,64 @@ def odd_even_sort(arr):
     return arr
 
 
+def bozo_sort(arr):
+    while not is_sorted(arr):
+        # Случайный выбор двух индексов для обмена
+        i = random.randint(0, len(arr) - 1)
+        j = random.randint(0, len(arr) - 1)
+
+        # Обмен значениями
+        arr[i], arr[j] = arr[j], arr[i]
+    return arr
+
+
+def __permute(arr):
+    if len(arr) == 0:
+        return [[]]
+    if len(arr) == 1:
+        return [arr]
+
+    permutations = []
+
+    # Генерируем перестановки
+    for i in range(len(arr)):
+        current = arr[i]
+        remaining = arr[:i] + arr[i + 1:]
+
+        for p in __permute(remaining):
+            permutations.append([current] + p)
+
+    return permutations
+
+
+def perm_sort(arr):
+    # Генерируем все возможные перестановки
+    permutations = __permute(arr)
+
+    # Находим минимальную перестановку (отсортированный массив)
+    sorted_arr = min(permutations)
+
+    return sorted_arr
+
+
+def __stooge_sort(arr, l, r):
+    # Если первый элемент больше последнего, меняем их местами
+    if arr[l] > arr[r]:
+        arr[l], arr[r] = arr[r], arr[l]
+
+    # Если размер массива больше 2
+    if r - l + 1 > 2:
+        t = r - l + 1
+        __stooge_sort(arr, l, r - t // 3)
+        __stooge_sort(arr, l + t // 3, r)
+        __stooge_sort(arr, l, r - t // 3)
+
+
+def stooge_sort(arr):
+    __stooge_sort(arr, 0, len(arr) - 1)
+    return arr
+
+
 def merge_sort(arr):
     if len(arr) > 1:
         mid = len(arr) // 2  # Находим середину массива
