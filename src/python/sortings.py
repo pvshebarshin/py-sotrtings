@@ -128,6 +128,11 @@ def stooge_sort(arr):
 
 
 def merge_sort(arr):
+    __merge_sort(arr)
+    return arr
+
+
+def __merge_sort(arr):
     if len(arr) > 1:
         mid = len(arr) // 2  # Находим середину массива
         left_half = arr[:mid]  # Левая половина
