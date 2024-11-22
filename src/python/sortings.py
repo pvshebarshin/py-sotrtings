@@ -261,3 +261,33 @@ def shaker_sort(arr):
                 _sorted = False
         left += 1
     return arr
+
+
+def __compare_and_swap(arr, i, j, direction):
+    if (direction == 1 and arr[i] > arr[j]) or (direction == 0 and arr[i] < arr[j]):
+        arr[i], arr[j] = arr[j], arr[i]
+
+
+def __bitonic_merge(arr, low, cnt, direction):
+    if cnt > 1:
+        k = cnt // 2
+        for i in range(low, low + k):
+            __compare_and_swap(arr, i, i + k, direction)
+        __bitonic_merge(arr, low, k, direction)
+        __bitonic_merge(arr, low + k, k, direction)
+
+
+def __bitonic_sort(arr, low, cnt, direction):
+    if cnt > 1:
+        k = cnt // 2
+        __bitonic_sort(arr, low, k, 1)
+        __bitonic_sort(arr, low + k, k, 0)
+        __bitonic_merge(arr, low, cnt, direction)
+
+
+def bitonic_sort(arr):
+    n = len(arr)
+    if n & (n - 1) != 0:
+        raise ValueError("Длина массива должна быть степенью двойки.")
+    __bitonic_sort(arr, 0, n, 1)
+    return arr
