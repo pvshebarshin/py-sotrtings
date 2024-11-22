@@ -2,6 +2,8 @@ import random
 
 from python.utils import is_sorted
 
+MIN_MERGE = 32
+
 
 def counting_sort(arr):
     if len(arr) == 0:
@@ -290,4 +292,67 @@ def bitonic_sort(arr):
     if n & (n - 1) != 0:
         raise ValueError("Длина массива должна быть степенью двойки.")
     __bitonic_sort(arr, 0, n, 1)
+    return arr
+
+
+def __calc_min_run(n):
+    r = 0
+    while n >= MIN_MERGE:
+        r |= n & 1
+        n >>= 1
+    return n + r
+
+
+def __insertion_sort(arr, left, right):
+    for i in range(left + 1, right + 1):
+        key_item = arr[i]
+        j = i - 1
+        while j >= left and arr[j] > key_item:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key_item
+
+
+def __merge(left, right, arr):
+    i = j = k = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            arr[k] = left[i]
+            i += 1
+        else:
+            arr[k] = right[j]
+            j += 1
+        k += 1
+
+    while i < len(left):
+        arr[k] = left[i]
+        i += 1
+        k += 1
+
+    while j < len(right):
+        arr[k] = right[j]
+        j += 1
+        k += 1
+
+
+def tim_sort(arr):
+    n = len(arr)
+    min_run = __calc_min_run(n)
+
+    for start in range(0, n, min_run):
+        end = min(start + min_run - 1, n - 1)
+        __insertion_sort(arr, start, end)
+
+    size = min_run
+    while size < n:
+        for left in range(0, n, size * 2):
+            mid = min(n - 1, left + size - 1)
+            right = min((left + 2 * size - 1), (n - 1))
+
+            if mid < right:  # There is a run to merge
+                left_run = arr[left:mid + 1]
+                right_run = arr[mid + 1:right + 1]
+                __merge(left_run, right_run, arr[left:right + 1])
+
+        size *= 2
     return arr
