@@ -9,17 +9,12 @@ def counting_sort(arr):
     if len(arr) == 0:
         return arr
 
-    # Находим максимальное значение в массиве
     max_val = max(arr)
-
-    # Создаем массив для подсчета вхождений
     count = [0] * (max_val + 1)
 
-    # Подсчитываем вхождения каждого элемента
     for num in arr:
         count[num] += 1
 
-    # Формируем отсортированный массив
     sorted_index = 0
     for i in range(len(count)):
         while count[i] > 0:
@@ -32,13 +27,9 @@ def counting_sort(arr):
 
 def bubble_sort(arr):
     n = len(arr)
-    # Проходим по всем элементам массива
     for i in range(n):
-        # Последние i элементов уже отсортированы
         for j in range(0, n - i - 1):
-            # Сравниваем соседние элементы
             if arr[j] > arr[j + 1]:
-                # Меняем их местами, если они в неправильном порядке
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
     return arr
 
@@ -56,13 +47,11 @@ def odd_even_sort(arr):
     while not is_sorted:
         is_sorted = True
 
-        # Сортировка по четным индексам
         for i in range(1, n - 1, 2):
             if arr[i] > arr[i + 1] and i + 1 < n:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
                 is_sorted = False
 
-        # Сортировка по нечетным индексам
         for i in range(0, n - 1, 2):
             if arr[i] > arr[i + 1] and i + 1 < n:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
@@ -73,11 +62,9 @@ def odd_even_sort(arr):
 
 def bozo_sort(arr):
     while not is_sorted(arr):
-        # Случайный выбор двух индексов для обмена
         i = random.randint(0, len(arr) - 1)
         j = random.randint(0, len(arr) - 1)
 
-        # Обмен значениями
         arr[i], arr[j] = arr[j], arr[i]
     return arr
 
@@ -355,4 +342,31 @@ def tim_sort(arr):
                 __merge(left_run, right_run, arr[left:right + 1])
 
         size *= 2
+    return arr
+
+
+def __flip(arr, k):
+    start = 0
+    while start < k:
+        arr[start], arr[k] = arr[k], arr[start]
+        start += 1
+        k -= 1
+
+
+def __find_max_index(arr, n):
+    max_index = 0
+    for i in range(1, n):
+        if arr[i] > arr[max_index]:
+            max_index = i
+    return max_index
+
+
+def pancake_sort(arr):
+    n = len(arr)
+    for curr_size in range(n, 1, -1):
+        max_index = __find_max_index(arr, curr_size)
+
+        if max_index != curr_size - 1:
+            __flip(arr, max_index)
+            __flip(arr, curr_size - 1)
     return arr
