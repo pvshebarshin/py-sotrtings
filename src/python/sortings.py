@@ -370,3 +370,45 @@ def pancake_sort(arr):
             __flip(arr, max_index)
             __flip(arr, curr_size - 1)
     return arr
+
+
+def cycle_sort(arr):
+    n = len(arr)
+
+    writes = 0
+
+    for index in range(0, n - 1):
+        temp = arr[index]
+        pos = index
+        for i in range(index + 1, n):
+            if arr[i] < temp:
+                pos += 1
+
+        if pos == index:
+            continue
+
+        while temp == arr[pos]:
+            pos += 1
+
+        if pos != index:
+            t = temp
+            temp = arr[pos]
+            arr[pos] = t
+            writes += 1
+
+        while pos != index:
+            pos = index
+
+            for j in range(index + 1, n):
+                if arr[j] < temp:
+                    pos += 1
+
+            while temp == arr[pos]:
+                pos += 1
+
+            if temp != arr[pos]:
+                t = temp
+                temp = arr[pos]
+                arr[pos] = t
+                writes += 1
+    return arr
